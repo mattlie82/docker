@@ -35,7 +35,7 @@ VOLUME /home/dockeruser/shared
 # Print something nice on entry.
 COPY WELCOME $DOCKERUSER_HOME/WELCOME
 
-WORKDIR /home/dockeruser
+WORKDIR $DOCKERUSER_HOME 
 
 USER root
 ENTRYPOINT ["/sbin/my_init","--quiet","--","/sbin/setuser","dockeruser","/bin/bash","-l","-c"]
