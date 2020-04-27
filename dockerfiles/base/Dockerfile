@@ -23,12 +23,13 @@ ENV HOME /home/$USER
 ENV USER $USER
 
 RUN adduser --disabled-password --gecos '' $USER
-RUN adduser $USER sudo; echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+RUN adduser $USER sudo; echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     echo "cat $HOME/WELCOME" >> $HOME/.bashrc && \
     chmod +x /etc/my_init.d/set-home-permissions.sh && \
     ldconfig
 
-
+#make sure everything is in place
+RUN chown -R $USER:$USER /home/$USER
 
 USER $USER
 
@@ -40,7 +41,5 @@ VOLUME $HOME/shared
 COPY WELCOME $HOME/WELCOME
 
 WORKDIR $HOME 
-
-USER root
 
 CMD ["/bin/bash","-i"]
