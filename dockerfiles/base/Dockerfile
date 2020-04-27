@@ -18,25 +18,29 @@ ENV LC_ALL=C.UTF-8 \
 
 COPY set-home-permissions.sh /etc/my_init.d/set-home-permissions.sh
 
-RUN useradd -m -s /bin/bash -G sudo,docker_env dockeruser && \
-    echo "dockeruser:docker" | chpasswd && \
-    echo "dockeruser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    rm /etc/my_init.d/10_syslog-ng.init && \ 
-    echo "cat /home/dockeruser/WELCOME" >> /home/dockeruser/.bashrc && \
+ARG USER=dockeruser
+ENV HOME /home/$USER
+ENV USER $USER
+
+RUN adduser --disabled-password --gecos '' $USER
+RUN adduser $USER sudo; echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+    echo "cat $HOME/WELCOME" >> $HOME/.bashrc && \
     chmod +x /etc/my_init.d/set-home-permissions.sh && \
     ldconfig
 
-USER dockeruser
-ENV DOCKERUSER_HOME /home/dockeruser
-RUN touch $DOCKERUSER_HOME/.sudo_as_admin_successful && \
-    mkdir $DOCKERUSER_HOME/shared
-VOLUME /home/dockeruser/shared
+
+
+USER $USER
+
+RUN touch $HOME/.sudo_as_admin_successful && \
+    mkdir $HOME/shared
+VOLUME $HOME/shared
 
 # Print something nice on entry.
-COPY WELCOME $DOCKERUSER_HOME/WELCOME
+COPY WELCOME $HOME/WELCOME
 
 WORKDIR $DOCKERUSER_HOME 
 
 USER root
-ENTRYPOINT ["/sbin/my_init","--quiet","--","/sbin/setuser","dockeruser","/bin/bash","-l","-c"]
+ENTRYPOINT ["/sbin/my_init","--quiet","--","/sbin/setuser","$USER","/bin/bash","-l","-c"]
 CMD ["/bin/bash","-i"]
