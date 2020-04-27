@@ -42,5 +42,5 @@ COPY WELCOME $HOME/WELCOME
 WORKDIR $HOME 
 
 USER root
-ENTRYPOINT ["/sbin/my_init","--quiet","--","/sbin/setuser","$USER","/bin/bash","-l","-c"]
+
 CMD ["/bin/bash","-i"]
