@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.11
+FROM ubuntu:bionic
 MAINTAINER Matthias Liero <matthias.liero@gmail.com>
 
 # Get Ubuntu updates
