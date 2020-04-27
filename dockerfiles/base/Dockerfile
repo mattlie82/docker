@@ -39,7 +39,7 @@ VOLUME $HOME/shared
 # Print something nice on entry.
 COPY WELCOME $HOME/WELCOME
 
-WORKDIR $DOCKERUSER_HOME 
+WORKDIR $HOME 
 
 USER root
 ENTRYPOINT ["/sbin/my_init","--quiet","--","/sbin/setuser","$USER","/bin/bash","-l","-c"]
