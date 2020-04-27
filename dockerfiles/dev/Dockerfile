@@ -53,7 +53,7 @@ RUN apt-get -qq update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR $DOCKERUSER_HOME 
-COPY WELCOME $DOCKERUSER_HOME/WELCOME
+WORKDIR $HOME 
+COPY WELCOME $HOME/WELCOME
 
-USER root
+USER $USER
